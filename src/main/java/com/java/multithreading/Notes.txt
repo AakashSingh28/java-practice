@@ -1,0 +1,92 @@
+Case 1: Thread Scheduler : Responsible for scheduling the Threads
+                           This is part of JVM
+
+Case 2: Diff b/w t.start() and t.run();
+        t.start(): It makes child Thread to start the run method. So there will be two threads
+		t.run() : It will execute just like normal method. So there will be only one Thread
+
+case 3 : Task of start method
+       1: Register this Thread with Thread scheduler
+	   2: Perform all other mandatory activity
+	   3: Invoke run();
+
+Case 4 : Thread start(); always call no arguments run(); method only,
+         If we want another overloaded method to run we need call additionally
+
+
+Life cycle of Thread:
+           t.start();          T.S allocates              run() method completes
+		                         processor
+ new/Born ------------> ready/Runnable----------> Running -----> Dead
+new MyThread
+
+
+
+Note : If we started the Thread again we start the same Thread we will get
+       "IllegalThreadStateException"
+===============================================================================================
+
+  ## Multi Threading || yield() || join() ##
+
+[1] How many ways we can prevent (Temporary stop) the Thread
+
+     By using these 3 methods :  yeild(), join(), sleep()
+
+1) yeild() : It causes to pause current executing Thread. To give the chance for waiting Thread of same priority.
+             If there is no waiting Thread, Or all waiting Thread have low priority then same Thread can continue its execution
+
+             Thread which is yeild, when it will get the chance one again it depends on T.S., And we can't expect exactly.
+
+    ** public static native void yeild();
+
+
+Life cycle of Thread:
+           t.start();          T.S allocates              run() method completes
+		                         processor
+ new/Born ------------> ready/Runnable----------> Running -----> Dead
+new MyThread                   ^                     |
+                               |                     |
+                               | ------------------- |
+                                   Thread.yeild()
+
+
+2) wait(): If a Thread wants to wait until completing some other Thread than we should go for join method
+          For example if Thread T1 wants to until completing T2 than T2 should call wait method,
+          there for T1 went for wait state until T2 completes its JOB
+
+ public final void join();
+ public final  void join (long ms); // Wait for ms for other Thread to complete the job otherwise it will continue the job
+ public final  void join (long ms,int ns);
+
+Life cycle of Thread:
+           t.start();          T.S allocates              run() method completes
+		                         processor
+ new/Born ------------> ready/Runnable----------> Running -----> Dead
+new MyThread                ^                        |
+                            | t2 completed           |  t2.wait()
+                            |  the job               |
+                            -------------------- waiting state ( block for joining )
+
+
+
+
+
+Note:  Dead Lock : If a Thread calls join method on the same Thread itself than the program will be stuck(Dead Lock)
+   e.g. Thread.currentThread().join();  // main thread is waiting for itself to complete the task which will be deadlock.
+
+3)Sleep : If a Thread don't want to perform any operation for a particular amount of time than we should go for sleep method.
+         public static native void sleep (long ms)
+          public static native void sleep (long ms, int ns);
+
+Life cycle of Thread:
+           t.start();          T.S allocates              run() method completes
+		                         processor
+ new/Born ------------> ready/Runnable----------> Running -----> Dead
+new MyThread                ^                        |
+                            | time expires           |  Thread.sleep(1000);
+                            | Thread interrupted     |
+                            -------------------- Sleep state ( block for joining )
+
+
+
+
