@@ -87,6 +87,13 @@ new MyThread                ^                        |
                             | Thread interrupted     |
                             -------------------- Sleep state ( block for joining )
 
+==================================================================================================
+synchronization
 
-
+  We have two types of locks based on synchronization
+  1. Object level :: For non-static methods
+  2. Class Level  :: For static methods, Every class in java has a unique lock which is also known as class level lock
+                     If a Thread wants to execute a static synchronized method than Thread required class level lock
+                     Once thread got class level lock than it is allowed to execute any static synchronized method of that class
+                     Once method execution completes automatically Thread releases the lock.
 
